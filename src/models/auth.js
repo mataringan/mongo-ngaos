@@ -24,7 +24,7 @@ const authNgaos = new Schema({
   },
   image: {
     type: String,
-    required: true,
+    required: false,
   },
   createdAt: { type: Date, default: Date.now },
 });
