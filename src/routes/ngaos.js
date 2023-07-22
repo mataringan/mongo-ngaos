@@ -12,5 +12,5 @@ router.get("/", handleRoot);
 
 router.post("/product-ngaos", validator, createProduct);
 
-router.get("/product", getAllProduct);
+router.get("/product-ngaos", getAllProduct);
 module.exports = router;
