@@ -15,6 +15,6 @@ router.post("/product-ngaos", validator, createProduct);
 
 router.get("/product-ngaos", getAllProduct);
 
-router.post("/register", register);
+router.post("/register", validator, register);
 
 module.exports = router;
