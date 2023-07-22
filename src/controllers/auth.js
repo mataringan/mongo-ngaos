@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const authProduct = require("../models/auth");
+const authNgaos = require("../models/auth");
 const cloudinary = require("./cloudinary");
 const { findEmail } = require("./email");
 const salt = 10;
@@ -65,7 +65,7 @@ module.exports = {
         });
       }
 
-      const createUser = await authProduct.create({
+      const createUser = await authNgaos.create({
         name,
         email,
         phone,
@@ -96,7 +96,7 @@ module.exports = {
             return;
           }
 
-          const createUser = await authProduct.create({
+          const createUser = await authNgaos.create({
             name,
             email,
             password,
@@ -113,5 +113,43 @@ module.exports = {
         }
       );
     }
+  },
+
+  async login(req, res) {
+    const { email, password } = req.body;
+
+    const user = await authNgaos.findOne({
+      email,
+    });
+
+    if (!user) {
+      res.status(404).json({
+        status: "error",
+        message: "email not found",
+      });
+      return;
+    }
+
+    const isPasswordCorrect = await checkPassword(user.password, password);
+
+    if (!isPasswordCorrect) {
+      res.status(401).json({
+        status: "error",
+        message: "Password Salah!",
+      });
+      return;
+    }
+    const token = createToken({
+      _id: user._id,
+      email: user.email,
+      role: user.role,
+      createdAt: user.createdAt,
+    });
+
+    res.status(201).json({
+      token: token,
+      email: user.email,
+      role: user.role,
+    });
   },
 };
