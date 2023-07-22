@@ -78,6 +78,40 @@ module.exports = {
         message: "register success",
         data: createUser,
       });
+    } else {
+      const fileBase64 = req.file.buffer.toString("base64");
+      const file = `data:${req.file.mimetype};base64,${fileBase64}`;
+
+      cloudinary.uploader.upload(
+        file,
+        {
+          folder: "user-ngaos",
+        },
+        async function (err, result) {
+          if (!!err) {
+            res.status(400).json({
+              status: "Upload Fail",
+              errors: err.message,
+            });
+            return;
+          }
+
+          const createUser = await authProduct.create({
+            name,
+            email,
+            password,
+            email,
+            phone,
+            image: result.url,
+            role: "user",
+          });
+
+          res.status(201).json({
+            status: "success",
+            data: createUser,
+          });
+        }
+      );
     }
   },
 };
