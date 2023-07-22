@@ -29,4 +29,4 @@ const authNgaos = new Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model("authNgaos", authNgaos);
+module.exports = mongoose.model("userNgaos", authNgaos);
