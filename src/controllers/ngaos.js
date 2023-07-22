@@ -1,5 +1,6 @@
 const ProductNgaos = require("../models/ngaos");
 const cloudinary = require("./cloudinary");
+const path = require("path");
 exports.handleRoot = (req, res) => {
   res.status(200).json({
     status: "OK",
