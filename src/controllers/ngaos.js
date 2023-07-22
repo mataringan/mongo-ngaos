@@ -57,3 +57,30 @@ exports.createProduct = (req, res) => {
     );
   }
 };
+
+exports.getAllProduct = async (req, res) => {
+  const findAll = () => {
+    return ProductNgaos.find();
+  };
+  try {
+    const dataProduct = await findAll();
+    if (dataProduct.length === 0) {
+      res.status(200).json({
+        status: "failed",
+        message: "Data is empty",
+        data: [],
+      });
+      return;
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Get All Data Product Success",
+      data: dataProduct,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
