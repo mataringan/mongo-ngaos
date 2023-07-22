@@ -5,7 +5,8 @@ const {
   getAllProduct,
 } = require("../controllers/ngaos");
 const validator = require("../middleware/validation");
-const { register } = require("../controllers/auth");
+const { register, login } = require("../controllers/auth");
+const { authorize } = require("../middleware/authorize");
 
 const router = express.Router();
 
@@ -16,5 +17,7 @@ router.post("/product-ngaos", validator, createProduct);
 router.get("/product-ngaos", getAllProduct);
 
 router.post("/register", validator, register);
+
+router.post("/login", authorize, login);
 
 module.exports = router;
