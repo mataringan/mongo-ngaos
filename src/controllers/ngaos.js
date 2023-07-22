@@ -1,6 +1,5 @@
 const ProductNgaos = require("../models/ngaos");
 const cloudinary = require("./cloudinary");
-const path = require("path");
 exports.handleRoot = (req, res) => {
   res.status(200).json({
     status: "OK",
@@ -33,24 +32,26 @@ exports.createProduct = (req, res) => {
           return;
         }
 
-        const AddProduct = new ProductNgaos({
+        ProductNgaos.create({
           name,
           description,
           image: result.url,
           category,
           price,
-        });
-
-        AddProduct.save()
+        })
           .then((result) => {
             res.status(201).json({
+              status: "success",
               message: "Create Product Success",
               data: result,
             });
           })
-
           .catch((err) => {
             console.log(err);
+            res.status(500).json({
+              status: "failed",
+              message: err,
+            });
           });
       }
     );
