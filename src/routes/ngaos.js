@@ -18,6 +18,6 @@ router.get("/product-ngaos", getAllProduct);
 
 router.post("/register", validator, register);
 
-router.post("/login", authorize, login);
+router.post("/login", login);
 
 module.exports = router;
