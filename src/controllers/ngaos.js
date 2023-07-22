@@ -10,41 +10,49 @@ exports.handleRoot = (req, res) => {
 
 exports.createProduct = (req, res) => {
   const { name, description, category, price } = req.body;
-  const image = req.file;
 
-  // upload gambar ke cloudinary
-  cloudinary.uploader.upload(image.path, (error, result) => {
-    if (error) {
-      console.log("Upload gambar gagal:", error);
-      return res.status(500).json({ message: "Upload gambar gagal" });
-    }
-
-    // Ambil URL gambar yang diunggah dari hasil upload Cloudinary
-    const imageUrl = result.secure_url;
-
-    const addProduct = new ProductNgaos({
-      name,
-      description,
-      image: imageUrl,
-      category,
-      price,
+  if (req.file == null) {
+    res.status(400).json({
+      status: "failed",
+      message: "you must input image",
     });
+    return;
+  } else {
+    const fileBase64 = req.file.buffer.toString("base64");
+    const file = `data:${req.file.mimetype};base64,${fileBase64}`;
 
-    addProduct
-      .save()
-      .then((result) => {
-        res.status(201).json({
-          status: "success",
-          message: "Create Product Success",
-          data: result,
+    cloudinary.uploader.upload(
+      file,
+      { folder: "product-ngaos" },
+      async function (err, result) {
+        if (!!err) {
+          res.status(400).json({
+            status: "upload fail",
+            errors: err.message,
+          });
+          return;
+        }
+
+        const AddProduct = new ProductNgaos({
+          name,
+          description,
+          image: result.url,
+          category,
+          price,
         });
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json({
-          status: "failed",
-          message: err,
-        });
-      });
-  });
+
+        AddProduct.save()
+          .then((result) => {
+            res.status(201).json({
+              message: "Create Product Success",
+              data: result,
+            });
+          })
+
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    );
+  }
 };
