@@ -143,7 +143,7 @@ module.exports = {
       _id: user._id,
       email: user.email,
       role: user.role,
-      createdAt: user.createdAt,
+      createdAt: user.createdAt.toISOString(),
     });
 
     res.status(201).json({
