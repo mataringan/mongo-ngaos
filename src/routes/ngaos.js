@@ -20,6 +20,6 @@ router.post("/register", validator, register);
 
 router.post("/login", login);
 
-router.get("whoami", authorize, whoami);
+router.get("/whoami", authorize, whoami);
 
 module.exports = router;
