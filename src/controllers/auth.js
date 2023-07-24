@@ -100,7 +100,6 @@ module.exports = {
             name,
             email,
             password,
-            email,
             phone,
             image: result.url,
             role: "user",
@@ -150,6 +149,24 @@ module.exports = {
       token: token,
       email: user.email,
       role: user.role,
+    });
+  },
+
+  async whoami(req, res) {
+    const { _id, name, email, phone, image, role } = req.user;
+    const user = {
+      _id,
+      name,
+      email,
+      phone,
+      image,
+      role,
+    };
+
+    res.status(200).json({
+      status: "success",
+      message: "get data success",
+      data: user,
     });
   },
 };
