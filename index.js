@@ -6,7 +6,6 @@ const app = express();
 const apiRouters = require("./src/routes/ngaos");
 
 app.use(bodyParser.json());
-app.use(cors());
 app.use("/", apiRouters);
 mongoose.set("strictQuery", false);
 mongoose
@@ -20,3 +19,5 @@ mongoose
     });
   })
   .catch((err) => console.log(err));
+
+app.use(cors());
